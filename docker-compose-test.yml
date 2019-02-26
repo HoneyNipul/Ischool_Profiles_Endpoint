@@ -1,0 +1,32 @@
+version: "2"
+
+services:
+    db:
+        image: registry.ischool.syr.edu:5000/ndlyga/postgres_hstore
+        environment:
+            - POSTGRES_USER=ischooldevdbuser
+            - POSTGRES_PASSWORD=ischooldev
+            - POSTGRES_DB=testdb
+        ports:
+            - 5432:5432
+
+    webapitest:
+        build:
+            context: .
+        links:
+            - db
+        environment:
+            APP_ENV: testing
+            APP_ENV_LOCAL: local
+            DATABASE_DB: testdb
+            DATABASE_ENGINE: django.db.backends.postgresql_psycopg2
+            DATABASE_HOST: db
+            DATABASE_PASSWORD: ischooldev
+            DATABASE_PORT: 5432
+            DATABASE_USER: ischooldevdbuser
+            STATIC_URL: "/static/"
+        volumes:
+            - ./ischool_profiles/:/var/webapp/
+        ports:
+            - 5678:5678
+        command: ["python", "/var/webapp/runtests.py"]

@@ -1,0 +1,62 @@
+# Official docker image.
+image: docker:latest
+
+variables:
+  DOCKER_HOST: tcp://localhost:2375
+  DOCKER_DRIVER: overlay2
+
+
+stages:
+  - build
+  - test
+  - deploy
+
+services:
+  - docker:dind
+
+build:
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASS registry.ischool.syr.edu:5000
+    - docker build --pull -t "registry.ischool.syr.edu:5000/ndlyga/$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
+    - docker push "registry.ischool.syr.edu:5000/ndlyga/$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+
+test:
+  stage: test
+  services:
+    - name: aidanlister/postgres-hstore
+      alias: postgres
+    - docker:dind
+  variables:
+    POSTGRES_DB: testdb
+    POSTGRES_USER: ischooldevdbuser
+    POSTGRES_PASSWORD: "ischooldev"
+    APP_ENV: testing
+    APP_ENV_LOCAL: local
+    DATABASE_DB: testdb
+    DATABASE_ENGINE: django.db.backends.postgresql_psycopg2
+    DATABASE_HOST: postgres
+    DATABASE_PASSWORD: ischooldev
+    DATABASE_PORT: 5432
+    DATABASE_USER: ischooldevdbuser
+    STATIC_URL: "/static/"
+    DOCKER_HOST: tcp://localhost:2375
+    DOCKER_DRIVER: overlay2
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASS registry.ischool.syr.edu:5000
+    - docker run -d --rm --name=testnats nats
+    - docker run -d --rm --name=testpostgresdb -e POSTGRES_DB=testdb -e POSTGRES_USER=ischooldevdbuser -e POSTGRES_PASSWORD=ischooldev aidanlister/postgres-hstore
+    - docker run --name=testcontainer --link testpostgresdb --link testnats "registry.ischool.syr.edu:5000/ndlyga/$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" python /var/webapp/runtests.py
+  except:
+    - master
+
+
+deploy-feature:
+  stage: deploy
+  services:
+    - docker:dind
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASS registry.ischool.syr.edu:5000
+    - docker run --rm registry.ischool.syr.edu:5000/ndlyga/deploy-helper helm upgrade --install --recreate-pods --force --set ingress.host=$CI_COMMIT_REF_SLUG.$CI_REGISTRY_IMAGE.dev.ischool.syr.edu --set image.tag=$CI_COMMIT_REF_SLUG $CI_REGISTRY_IMAGE-$CI_COMMIT_REF_SLUG ischool/ischool-profiles
+  only:
+    - staging

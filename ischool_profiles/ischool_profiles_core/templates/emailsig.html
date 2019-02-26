@@ -1,0 +1,24 @@
+<div style="margin-bottom:70px; font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; font-size:11pt;color:#333333;line-height:1.4;">
+    
+    <p style="margin:12px 0 18px;font-size:11pt;color:#333333;line-height:1.4; font-family: inherit;">
+
+        <strong style="color:#d44500; ">{{ profile.display_name }}</strong><br>
+        {% if profile.title %}{{ instance.title }}{% endif %}<br>
+        School of Information Studies</p>
+    <p style="margin:12px 0 18px;font-size:11pt;color:#333333;line-height:1.4; font-family: inherit;">
+        {% for number in profile.phone_numbers.all %}
+            {% if number.is_primary %}<b>{% endif %}
+            {{ number.phone_type }}: {{ number.number }} - {{ number.best_contact_time }}<br>
+            {% if number.is_primary %}</b>{% endif %}
+        {% endfor %}
+        <a href="mailto:ndlyga@syr.edu" style="color:#333333;"><span style="white-space: nowrap;">{{ profile.email_address }} &nbsp;&nbsp;</span></a></p>
+    
+        <p style="margin:12px 0;font-size:11pt;color:#333333;line-height:1.4; font-family: inherit;">
+            {% for address in profile.addresses.all %}
+                <b>{{ address.type }}</b><br>
+                {{ address.street_address }}, {{ address.city }} {{ address.state }} {{ address.zip_code }}
+            {% endfor %}
+        <a href="http://ischool.syr.edu/" style="color: rgb(149, 79, 114);"><span style="color: rgb(51, 51, 51);">ischool.syr.edu</span></a></p>
+    <p style="margin: 12px 0;color:#d44500;font-family: Georgia, Times, 'Times New Roman', serif;font-size:14pt;line-height:1.4;">Syracuse
+        University</p>
+</div>

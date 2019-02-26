@@ -1,0 +1,153 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Server",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "pythonPath": "${config:python.pythonPath}",
+            "program": "${workspaceRoot}/ischool_profiles/manage.py",
+            "cwd": "${workspaceRoot}",
+            "args": [
+                "runserver",
+                "--noreload",
+                "--nothreading"
+            ],
+            "env": {
+                "APP_ENV": "development",
+                "APP_HOST": "127.0.0.1",
+                "DATABASE_DB": "devdb",
+                "DATABASE_PASSWORD": "ischooldev",
+                "DATABASE_PORT": 5432,
+                "DATABASE_USER": "ischooldevdbuser",
+                "APP_ENV_LOCAL": "local",
+                "DATABASE_ENGINE": "django.db.backends.postgresql_psycopg2",
+                "DATABASE_HOST": "localhost",
+            },
+            "envFile": "${workspaceRoot}/.env",
+            "debugOptions": [
+                "WaitOnAbnormalExit",
+                "WaitOnNormalExit",
+                "RedirectOutput",
+                "DjangoDebugging"
+            ]
+        },
+        {
+            "name": "Make Migrations",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "pythonPath": "${config:python.pythonPath}",
+            "program": "${workspaceRoot}/ischool_profiles/manage.py",
+            "cwd": "${workspaceRoot}",
+            "args": [
+                "makemigrations",
+            ],
+            "env": {
+                "APP_ENV": "development",
+                "APP_HOST": "127.0.0.1",
+                "DATABASE_DB": "devdb",
+                "DATABASE_PASSWORD": "ischooldev",
+                "DATABASE_PORT": 5432,
+                "DATABASE_USER": "ischooldevdbuser",
+                "DATABASE_ENGINE": "django.db.backends.postgresql_psycopg2",
+            },
+            "envFile": "${workspaceRoot}/.env",
+            "debugOptions": [
+                "WaitOnAbnormalExit",
+                "WaitOnNormalExit",
+                "RedirectOutput",
+                "DjangoDebugging"
+            ]
+        },
+        {
+            "name": "Migrate Local",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "pythonPath": "${config:python.pythonPath}",
+            "program": "${workspaceRoot}/ischool_profiles/manage.py",
+            "cwd": "${workspaceRoot}",
+            "args": [
+                "migrate"
+            ],
+            "env": {
+                "APP_ENV": "development",
+                "APP_HOST": "127.0.0.1",
+                "DATABASE_DB": "devdb",
+                "DATABASE_PASSWORD": "ischooldev",
+                "DATABASE_PORT": 5432,
+                "DATABASE_USER": "ischooldevdbuser",
+                "APP_ENV_LOCAL": "local",
+                "DATABASE_ENGINE": "django.db.backends.postgresql_psycopg2",
+                "DATABASE_HOST": "localhost",
+            },
+            "envFile": "${workspaceRoot}/.env",
+            "debugOptions": [
+                "WaitOnAbnormalExit",
+                "WaitOnNormalExit",
+                "RedirectOutput",
+                "DjangoDebugging"
+            ]
+        },
+        {
+            "name": "Python",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": true,
+            "pythonPath": "${config:python.pythonPath}",
+            "program": "${file}",
+            "cwd": "${workspaceRoot}",
+            "env": {},
+            "envFile": "${workspaceRoot}/.env",
+            "debugOptions": [
+                "WaitOnAbnormalExit",
+                "WaitOnNormalExit",
+                "RedirectOutput"
+            ]
+        },
+        {
+            "name": "RunAPI Tests",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "pythonPath": "${config:python.pythonPath}",
+            "program": "${workspaceRoot}/ischool_profiles/manage.py",
+            "cwd": "${workspaceRoot}/ischool_profiles/",
+            "env": {
+                "APP_HOST": "127.0.0.1",
+                "APP_ENV": "testing",
+                "APP_ENV_LOCAL": "local",
+                "DATABASE_DB": "testdb",
+                "DATABASE_ENGINE": "django.db.backends.postgresql_psycopg2",
+                "DATABASE_HOST": "localhost",
+                "DATABASE_PASSWORD": "ischooldev",
+                "DATABASE_PORT": "5432",
+                "DATABASE_USER": "ischooldevdbuser",
+                "STATIC_URL": "/static/"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "args": [
+                "test",
+            
+            ],
+            "debugOptions": [
+                "WaitOnAbnormalExit",
+                "WaitOnNormalExit",
+                "RedirectOutput"
+            ]
+        },
+        {
+            "name": "Attach (Remote Debug)",
+            "type": "python",
+            "request": "attach",
+            "localRoot": "${workspaceRoot}/ischool_profiles/",
+            "remoteRoot": "/var/webapp/",
+            "port": 5678,
+            "secret": "ischooldev",
+            "host": "localhost"
+        }
+
+    ]
+}

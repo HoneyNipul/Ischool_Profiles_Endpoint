@@ -1,0 +1,6 @@
+{
+    "python.linting.pylintEnabled": false,
+    "python.pythonPath": "env\\Scripts\\python.exe",
+    "git.ignoreLimitWarning": true,
+    "python.jediEnabled": false,
+}
